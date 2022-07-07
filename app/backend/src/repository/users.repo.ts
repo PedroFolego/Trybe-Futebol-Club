@@ -1,4 +1,4 @@
-import { Op } from 'sequelize';
+import { User } from '../interfaces';
 import { IUserModel } from '../interfaces/login';
 import Users from '../database/models/users.model';
 
@@ -7,16 +7,8 @@ export default class UserRepository implements IUserModel {
     this.model = model;
   }
 
-  async validateLogin(email: string, password: string): Promise<boolean> {
-    const validLogin = await this.model.findOne({ where: {
-      [Op.and]: [
-        { email },
-        { password },
-      ],
-    } });
-    if (validLogin === null) {
-      return false;
-    }
-    return true;
+  async validateLogin(email: string): Promise<User> {
+    const validLogin = await this.model.findOne({ where: { email } });
+    return validLogin as User;
   }
 }
