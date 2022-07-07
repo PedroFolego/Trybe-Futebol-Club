@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import statusMessage from '../utils';
 import { ILoginService } from '../interfaces/login';
 
 export default class LoginController {
@@ -10,10 +11,10 @@ export default class LoginController {
   async validateLogin(req: Request, _res: Response, next: NextFunction) {
     try {
       const { email, password } = req.body;
+      const user = await this.service.validateLogin(email, password);
+      if (user) return next();
 
-      if (await this.service.validateLogin(email, password)) return next();
-
-      next('erro');
+      next(statusMessage(400, 'Email ou senha inválido'));
     } catch (error) {
       next(error);
     }
