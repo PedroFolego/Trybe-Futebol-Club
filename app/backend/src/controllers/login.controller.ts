@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { ILoginService } from '../interfaces';
+import { ILoginService } from '../interfaces/login';
 
 export default class LoginController {
   private service;

@@ -1,5 +1,5 @@
 import RepositoryUser from '../repository/users.repo';
-import { ILoginService } from '../interfaces';
+import { ILoginService } from '../interfaces/login';
 
 export default class LoginService implements ILoginService {
   constructor(private repository: RepositoryUser) {

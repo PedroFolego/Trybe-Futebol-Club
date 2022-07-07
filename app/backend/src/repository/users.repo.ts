@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { IUserModel } from '../interfaces';
+import { IUserModel } from '../interfaces/login';
 import Users from '../database/models/users.model';
 
 export default class UserRepository implements IUserModel {
@@ -7,7 +7,7 @@ export default class UserRepository implements IUserModel {
     this.model = model;
   }
 
-  async validateLogin(email: string, password: string):Promise<boolean> {
+  async validateLogin(email: string, password: string): Promise<boolean> {
     const validLogin = await this.model.findOne({ where: {
       [Op.and]: [
         { email },

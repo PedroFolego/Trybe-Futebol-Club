@@ -7,6 +7,6 @@ const login = Router();
 
 const controller = new LoginController(new LoginService(new UserRepository()));
 
-login.get('/', controller.validateLogin);
+login.post('/', controller.validateLogin);
 
 export default login;
