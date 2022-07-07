@@ -3,9 +3,9 @@ export interface ErrorHandler extends Error {
 }
 
 export interface ILoginService {
-  validateLogin(email: string, password: string): boolean
+  validateLogin(email: string, password: string): Promise<boolean>
 }
 
-export interface ILoginModel {
-  validateLogin(email: string, password: string): boolean
+export interface IUserModel {
+  validateLogin(email: string, password: string): Promise<boolean>
 }

@@ -4,6 +4,7 @@ module.exports = {
       id: {
         primaryKey: true,
         type: Sequelize.INTEGER,
+        autoIncrement: true
       },
       password: {
         type: Sequelize.STRING

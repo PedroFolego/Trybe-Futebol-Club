@@ -1,13 +1,13 @@
-import { Model } from 'sequelize';
+import RepositoryUser from '../repository/users.repo';
 import { ILoginService } from '../interfaces';
 
-export default class LoginSerivce implements ILoginService {
-  constructor(private model: Model) {
-    this.model = model;
+export default class LoginService implements ILoginService {
+  constructor(private repository: RepositoryUser) {
+    this.repository = repository;
   }
 
-  validateLogin(email: string, password: string) {
-    const valid = this.model.findOne(email, password);
+  async validateLogin(email: string, password: string):Promise<boolean> {
+    const valid = this.repository.validateLogin(email, password);
     return valid;
   }
 }
