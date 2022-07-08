@@ -17,7 +17,7 @@ export default class LoginController {
         next(statusMessage(StatusCodes.UNAUTHORIZED, 'All fields must be filled'));
       }
       const user = await this.service.validateLogin(email, password);
-      if (user) next();
+      if (user) return next();
 
       next(statusMessage(StatusCodes.BAD_REQUEST, 'Incorrect email or password'));
     } catch (error) {
@@ -28,7 +28,7 @@ export default class LoginController {
   generateToken = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email } = req.body;
-      const token = this.service.generateToken(email);
+      const token = await this.service.generateToken(email);
       return res.status(StatusCodes.OK).json({ token });
     } catch (error) {
       next(error);

@@ -17,8 +17,13 @@ import { after, before } from 'mocha';
 chai.use(chaiHttp);
 
 const { expect } = chai;
-describe('Verifica a rota Login', () => {
-  let chaiHttpResponse: Response;
+let chaiHttpResponse: Response;
+
+describe('Verifica a rota /login', () => {
+
+  after(async ()=>{
+    (Users.findOne as sinon.SinonStub).restore();
+  });
 
   it('Quando aceita', async () => {
 
@@ -106,3 +111,28 @@ describe('Verifica a rota Login', () => {
     });
   });
 });
+describe('Verifica a rota /login/validation', () => {
+
+  before(async () => {
+    sinon
+      .stub(Users, "findOne")
+      .resolves({
+        email: 'admin@admin.com',
+        role: 'admin',
+      } as Users);
+  });
+  after(async ()=>{
+    (Users.findOne as sinon.SinonStub).restore();
+  });
+  it('Quando o token é de um admin', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .post('/login')
+      .set({
+        authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTY1NzMwNTgwNH0.Y2zCKgBE3PvKUdRNjbIKBpoxREcsYgWcJ_hiXez_8P8'
+      });
+
+    expect(chaiHttpResponse.status).to.be.equals(200);
+    expect(chaiHttpResponse.body).to.be.eqls({ role: 'admin' });
+  })
+})

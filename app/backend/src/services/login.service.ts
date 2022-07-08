@@ -15,7 +15,7 @@ export default class LoginService implements ILoginService {
   }
 
   async validateLogin(email: string, password: string):Promise<boolean> {
-    const user = await this.repository.validateLogin(email);
+    const user = await this.repository.getUser(email);
     if (user) {
       const valid = bcrypt.compareSync(password, user.password);
       return valid;
@@ -23,8 +23,10 @@ export default class LoginService implements ILoginService {
     return false;
   }
 
-  generateToken(email:string): string {
-    const token = jwt.sign({ data: email }, this.jwtSecret);
+  async generateToken(email:string): Promise<string> {
+    const user = await this.repository.getUser(email);
+    const token = jwt.sign({ data: { email, role: user.role } }, this.jwtSecret);
+
     return token;
   }
 }

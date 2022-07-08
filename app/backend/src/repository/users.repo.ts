@@ -7,7 +7,7 @@ export default class UserRepository implements IUserModel {
     this.model = model;
   }
 
-  async validateLogin(email: string): Promise<User> {
+  async getUser(email: string): Promise<User> {
     const validLogin = await this.model.findOne({ where: { email } });
 
     return validLogin as User;
