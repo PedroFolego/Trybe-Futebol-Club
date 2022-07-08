@@ -7,6 +7,7 @@ import { app } from '../app';
 
 import { Response } from 'superagent';
 import Users from '../database/models/users.model';
+import { after, before } from 'mocha';
 
 // import LoginController from '../controllers/login.controller'
 // import LoginService from '../services/login.service'
@@ -19,47 +20,48 @@ const { expect } = chai;
 describe('Verifica a rota Login', () => {
   let chaiHttpResponse: Response;
 
-  it('Se retorna um status 200 e um token quando é feito uma requisição válida', async () => {
+  it('Quando aceita', async () => {
 
-  before(async () => {
-    sinon
-      .stub(Users, "findOne")
-      .resolves({
-        email: 'email@email.com',
-        password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO'
-      } as Users);
-  });
-
-  after(()=>{
-    (Users.findOne as sinon.SinonStub).restore();
-  })
-
-    chaiHttpResponse = await chai
-      .request(app)
-      .post('/login')
-      .send({
-        email: 'email@email.com',
-        password: 'password'
-      })
-
-    expect(chaiHttpResponse.status).to.be.equals(200);
-    expect(chaiHttpResponse.body).to.be.eqls({
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjU0NTI3MTg5fQ.XS_9AA82iNoiVaASi0NtJpqOQ_gHSHhxrpIdigiT-fc'
+    before(async () => {
+      sinon
+        .stub(Users, "findOne")
+        .resolves({
+          email: 'admin@admin.com',
+          password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW'
+        } as Users);
     });
-  });
 
-  it('Se retorna um status 400 quando é feito uma requisição', async () => {
+    // after(async ()=>{
+    //   (Users.findOne as sinon.SinonStub).restore();
+    // });
+
+    it('Se retorna um status 200 e um token quando é feito uma requisição válida', async () => {
+
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/login')
+        .send({
+          email: 'admin@admin.com',
+          password: 'secret_admin'
+        });
+
+      expect(chaiHttpResponse.status).to.be.equals(200);
+      expect(chaiHttpResponse.body).to.have.property('token');
+    });
+});
+
+  it('Quando recusado', async () => {
     before(async () => {
       sinon
         .stub(Users, "findOne")
         .resolves(null);
     });
   
-    after(()=>{
-      (Users.findOne as sinon.SinonStub).restore();
-    });
+    // after(()=>{
+    //   (Users.findOne as sinon.SinonStub).restore();
+    // });
 
-    it('Sem email', async () => {
+    it('Verifica se retorna um status 400 e uma mensagem quando está sem email', async () => {
 
       chaiHttpResponse = await chai
       .request(app)
@@ -73,7 +75,7 @@ describe('Verifica a rota Login', () => {
         message: 'All fields must be filled'
       });
     });
-    it('Sem password', async () => {
+    it('Verifica se retorna um status 400 e uma mensagem quando está sem password', async () => {
     
       chaiHttpResponse = await chai
       .request(app)
@@ -85,6 +87,21 @@ describe('Verifica a rota Login', () => {
       expect(chaiHttpResponse.status).to.be.equals(400);
       expect(chaiHttpResponse.body).to.be.eqls({
         message: 'All fields must be filled'
+      });
+    });
+    it('Verifica se retorna um status 401 e uma mensagem quando o email ou a senha estiver errado', async () => {
+
+      chaiHttpResponse = await chai
+      .request(app)
+      .post('/login')
+      .send({
+        email: 'email@invalido.com',
+        password: 'passwordErrado'
+      })
+
+      expect(chaiHttpResponse.status).to.be.equals(401);
+      expect(chaiHttpResponse.body).to.be.eqls({
+        message: 'Incorrect email or password'
       });
     });
   });
