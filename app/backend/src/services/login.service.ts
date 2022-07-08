@@ -29,4 +29,9 @@ export default class LoginService implements ILoginService {
 
     return token;
   }
+
+  getRole(token: string) {
+    const user = jwt.verify(token, this.jwtSecret);
+    return user;
+  }
 }

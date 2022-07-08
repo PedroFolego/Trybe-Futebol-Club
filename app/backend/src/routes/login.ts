@@ -18,5 +18,5 @@ login.post(
   factory().validateLogin,
   factory().generateToken,
 );
-
+login.get('/validate', factory().getRoleUser);
 export default login;

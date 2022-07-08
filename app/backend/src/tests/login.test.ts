@@ -21,9 +21,9 @@ let chaiHttpResponse: Response;
 
 describe('Verifica a rota /login', () => {
 
-  after(async ()=>{
-    (Users.findOne as sinon.SinonStub).restore();
-  });
+  // after(async ()=>{
+  //   (Users.findOne as sinon.SinonStub).restore();
+  // });
 
   it('Quando aceita', async () => {
 
@@ -127,7 +127,7 @@ describe('Verifica a rota /login/validation', () => {
   it('Quando o token é de um admin', async () => {
     chaiHttpResponse = await chai
       .request(app)
-      .post('/login')
+      .get('/login/validate')
       .set({
         authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTY1NzMwNTgwNH0.Y2zCKgBE3PvKUdRNjbIKBpoxREcsYgWcJ_hiXez_8P8'
       });

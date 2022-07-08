@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import statusMessage from '../utils';
-import { ILoginService } from '../interfaces/login';
+import { ILoginService, JwtPayloadHandler } from '../interfaces/login';
 
 export default class LoginController {
   public service;
@@ -30,6 +30,16 @@ export default class LoginController {
       const { email } = req.body;
       const token = await this.service.generateToken(email);
       return res.status(StatusCodes.OK).json({ token });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getRoleUser = (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const token = req.headers.authorization as string;
+      const { data: { role } } = this.service.getRole(token) as JwtPayloadHandler;
+      return res.status(StatusCodes.OK).json({ role });
     } catch (error) {
       next(error);
     }
