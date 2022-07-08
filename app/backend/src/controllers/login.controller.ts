@@ -14,12 +14,12 @@ export default class LoginController {
       const { email, password } = req.body;
 
       if (!email || !password) {
-        next(statusMessage(StatusCodes.UNAUTHORIZED, 'All fields must be filled'));
+        next(statusMessage(StatusCodes.BAD_REQUEST, 'All fields must be filled'));
       }
       const user = await this.service.validateLogin(email, password);
       if (user) return next();
 
-      next(statusMessage(StatusCodes.BAD_REQUEST, 'Incorrect email or password'));
+      next(statusMessage(StatusCodes.UNAUTHORIZED, 'Incorrect email or password'));
     } catch (error) {
       next(error);
     }
