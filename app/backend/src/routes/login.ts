@@ -5,7 +5,7 @@ import UserRepository from '../repository/users.repo';
 
 const login = Router();
 
-const entityFactory = () => {
+const factory = () => {
   const model = new UserRepository();
   const service = new LoginService(model);
   const controller = new LoginController(service);
@@ -15,8 +15,8 @@ const entityFactory = () => {
 
 login.post(
   '/',
-  entityFactory().validateLogin,
-  entityFactory().generateToken,
+  factory().validateLogin,
+  factory().generateToken,
 );
 
 export default login;

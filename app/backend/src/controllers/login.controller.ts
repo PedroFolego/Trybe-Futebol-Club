@@ -29,7 +29,7 @@ export default class LoginController {
     try {
       const { email } = req.body;
       const token = this.service.generateToken(email);
-      return res.status(200).json({ token });
+      return res.status(StatusCodes.OK).json({ token });
     } catch (error) {
       next(error);
     }

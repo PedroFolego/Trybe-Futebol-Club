@@ -1,11 +1,10 @@
 import * as express from 'express';
 import router from './routes';
-import LoginController from './controllers/login.controller';
-import LoginService from './services/login.service';
-import UserRepository from './repository/users.repo';
 import erroMiddleware from './middleware/erroMiddleware';
+// import LoginController from './controllers/login.controller';
+// import LoginService from './services/login.service';
+// import UserRepository from './repository/users.repo';
 
-const alloo = new LoginController(new LoginService(new UserRepository()));
 class App {
   public app: express.Express;
 
@@ -28,8 +27,7 @@ class App {
 
     this.app.use(express.json());
     this.app.use(accessControl);
-    this.app.post('/login', alloo.validateLogin, alloo.generateToken);
-    // this.app.use(router);
+    this.app.use(router);
     this.app.use(erroMiddleware);
   }
 
