@@ -4,16 +4,18 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-import Example from '../database/models/ExampleModel';
 
 import { Response } from 'superagent';
 import Users from '../database/models/users.model';
-import { ITokenValidate } from '../interfaces/login';
+
+// import LoginController from '../controllers/login.controller'
+// import LoginService from '../services/login.service'
+// import UserRepository from '../repository/users.repo'
+
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
-
 describe('Verifica a rota Login', () => {
   let chaiHttpResponse: Response;
 
@@ -46,7 +48,7 @@ describe('Verifica a rota Login', () => {
     });
   });
 
-  it('Se retorna um status 400 quando é feito uma requisição inválida', async () => {
+  it('Se retorna um status 400 quando é feito uma requisição', async () => {
     before(async () => {
       sinon
         .stub(Users, "findOne")
@@ -55,19 +57,35 @@ describe('Verifica a rota Login', () => {
   
     after(()=>{
       (Users.findOne as sinon.SinonStub).restore();
-    })
-  
-    chaiHttpResponse = await chai
+    });
+
+    it('Sem email', async () => {
+
+      chaiHttpResponse = await chai
       .request(app)
       .post('/login')
       .send({
-        email: 'email@email.com',
         password: 'password'
       })
 
-    expect(chaiHttpResponse.status).to.be.equals(400);
-    expect(chaiHttpResponse.body).to.be.eqls({
-      message: 'Email ou senha inválido'
+      expect(chaiHttpResponse.status).to.be.equals(400);
+      expect(chaiHttpResponse.body).to.be.eqls({
+        message: 'All fields must be filled'
+      });
+    });
+    it('Sem password', async () => {
+    
+      chaiHttpResponse = await chai
+      .request(app)
+      .post('/login')
+      .send({
+        email: 'email@email.com'
+      })
+      
+      expect(chaiHttpResponse.status).to.be.equals(400);
+      expect(chaiHttpResponse.body).to.be.eqls({
+        message: 'All fields must be filled'
+      });
     });
   });
 });

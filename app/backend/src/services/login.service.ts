@@ -18,6 +18,8 @@ export default class LoginService implements ILoginService {
     const user = await this.repository.validateLogin(email);
     if (user) {
       const valid = bcrypt.compareSync(password, user.password);
+      console.log(valid);
+
       return valid;
     }
     return false;
