@@ -1,12 +1,14 @@
 export interface ITeamsService {
-  getAll(): Promise<ITeams[]>
+  getAll(): Promise<ITeam[]>
+  getOne(id: string): Promise<ITeam | null>
 }
 
-export interface ITeams {
+export interface ITeam {
   id: number
   teamName: string
 }
 
 export interface ITeamsRepo {
-  getAll(): Promise<ITeams[]>
+  getAll(): Promise<ITeam[]>
+  getOne(id: string): Promise<ITeam | null>
 }

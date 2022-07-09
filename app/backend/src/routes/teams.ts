@@ -14,5 +14,6 @@ const factory = () => {
 };
 
 teams.get('/', factory().getAll);
+teams.get('/:id', factory().getOne);
 
 export default teams;

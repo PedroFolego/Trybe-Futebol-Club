@@ -5,4 +5,6 @@ export default class TeamsRepository implements ITeamsRepo {
   constructor(private model = Teams) {}
 
   getAll = async () => this.model.findAll();
+
+  getOne = async (id: string) => this.model.findByPk(Number(id));
 }

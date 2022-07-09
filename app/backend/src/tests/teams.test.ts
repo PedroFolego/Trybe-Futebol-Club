@@ -55,7 +55,7 @@ describe('Verifica a rota /teams/:id quando existe um time', () => {
   afterEach(() => {
     (Teams.findOne as sinon.SinonStub).restore();
   })
-  it('Um status 200 e um array com o time', async () => {
+  it('Um status 200 e o time', async () => {
     chaiHttpResponse = await chai
       .request(app)
       .get('/teams/3');
@@ -76,7 +76,7 @@ describe('Verifica a rota /teams/:id quando não existe um time', () => {
   afterEach(() => {
     (Teams.findOne as sinon.SinonStub).restore();
   })
-  it('Um status 200 e um array com o time', async () => {
+  it('Um status 404 e uma mensagem not found', async () => {
     chaiHttpResponse = await chai
       .request(app)
       .get('/teams/3');
