@@ -42,16 +42,48 @@ describe('Verifica a rota /teams', () => {
     expect(chaiHttpResponse.status).to.be.equal(200);
     expect(chaiHttpResponse.body).to.be.eqls(fakeResponse);
   });
-  // it('Um status 200 e um array com os times', async () => {
-    
-  // });
-  // it('Um status 200 e um array com os times', async () => {
-    
-  // });
-  // it('Um status 200 e um array com os times', async () => {
-    
-  // });
-  // it('Um status 200 e um array com os times', async () => {
-    
-  // });
 })
+describe('Verifica a rota /teams/:id quando existe um time', () => {
+  beforeEach(() => {
+    sinon
+      .stub(Teams, 'findOne')
+      .resolves({
+        id: 3,
+        teamName: 'Botafogo'
+      } as Teams)
+  })
+  afterEach(() => {
+    (Teams.findOne as sinon.SinonStub).restore();
+  })
+  it('Um status 200 e um array com o time', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .get('/teams/3');
+
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.be.eqls({
+      id: 3,
+      teamName: 'Botafogo'
+    });
+  });
+});
+describe('Verifica a rota /teams/:id quando não existe um time', () => {
+  beforeEach(() => {
+    sinon
+      .stub(Teams, 'findOne')
+      .resolves(null)
+  })
+  afterEach(() => {
+    (Teams.findOne as sinon.SinonStub).restore();
+  })
+  it('Um status 200 e um array com o time', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .get('/teams/3');
+
+    expect(chaiHttpResponse.status).to.be.equal(404);
+    expect(chaiHttpResponse.body).to.be.eqls({
+     message: 'Team not found'
+    });
+  });
+});
