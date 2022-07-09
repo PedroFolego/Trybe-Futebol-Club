@@ -17,11 +17,11 @@ Matches.init({
     primaryKey: true,
     autoIncrement: true,
   },
-  homeTeam: DataTypes.STRING,
-  homeTeamGoals: DataTypes.NUMBER,
-  awayTeam: DataTypes.STRING,
-  awayTeamGoals: DataTypes.NUMBER,
-  inProgress: DataTypes.NUMBER,
+  homeTeam: DataTypes.INTEGER,
+  homeTeamGoals: DataTypes.INTEGER,
+  awayTeam: DataTypes.INTEGER,
+  awayTeamGoals: DataTypes.INTEGER,
+  inProgress: DataTypes.BOOLEAN,
 }, {
   // ... Outras configs
   underscored: true,
