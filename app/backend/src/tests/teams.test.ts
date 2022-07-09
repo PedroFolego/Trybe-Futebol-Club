@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 const { expect } = chai;
 let chaiHttpResponse: Response;
 
-describe('Verifica retorno do método GET', () => {
+describe('Verifica a rota /teams', () => {
   const fakeResponse = [
     {
       id: 1,
