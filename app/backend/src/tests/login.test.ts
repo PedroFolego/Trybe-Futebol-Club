@@ -20,22 +20,20 @@ const { expect } = chai;
 let chaiHttpResponse: Response;
 
 describe('Verifica a rota /login', () => {
-
+  beforeEach(async () => {
+    sinon
+      .stub(Users, "findOne")
+      .resolves({
+        email: 'admin@admin.com',
+        password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW'
+      } as Users);
+  });
+  
+  afterEach(async ()=>{
+    (Users.findOne as sinon.SinonStub).restore();
+  });
+  
   it('Se retorna um status 200 e um token quando é feito uma requisição válida', async () => {
-    before(async () => {
-      sinon
-        .stub(Users, "findOne")
-        .resolves({
-          email: 'admin@admin.com',
-          password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW'
-        } as Users);
-    });
-    
-    after(async ()=>{
-      (Users.findOne as sinon.SinonStub).restore();
-    });
-    
-      
       chaiHttpResponse = await chai
       .request(app)
       .post('/login')
@@ -47,19 +45,7 @@ describe('Verifica a rota /login', () => {
       expect(chaiHttpResponse.status).to.be.equals(200);
       expect(chaiHttpResponse.body).to.have.property('token');
   });
-
-  it('Verifica se retorna um status 400 e uma mensagem quando um dos campos não existe', async () => {
-    before(async () => {
-      sinon
-        .stub(Users, "findOne")
-        .resolves(null);
-    });
-
-    after(()=>{
-      (Users.findOne as sinon.SinonStub).restore();
-    });
-
-
+  it('Se retorna um status 400 e uma mensagem quando um dos campos não existe', async () => {
     chaiHttpResponse = await chai
       .request(app)
       .post('/login')
@@ -84,26 +70,24 @@ describe('Verifica a rota /login', () => {
       message: 'All fields must be filled'
     });
   });
-    it('Verifica se retorna um status 400 e uma mensagem quando o email ou a senha estiver errado', async () => {
-      
-      chaiHttpResponse = await chai
-      .request(app)
-      .post('/login')
-      .send({
-        email: 'email@invalido.com',
-        password: 'passwordErrado'
-      })
-      
-      expect(chaiHttpResponse.status).to.be.equals(400);
-      expect(chaiHttpResponse.body).to.be.eqls({
-        message: 'Incorrect email or password'
-      });
+  it('Se retorna um status 401 e uma mensagem quando o email ou a senha estiver errado', async () => {
+    chaiHttpResponse = await chai
+    .request(app)
+    .post('/login')
+    .send({
+      email: 'email@invalido.com',
+      password: 'passwordErrado'
+    })
+    
+    expect(chaiHttpResponse.status).to.be.equals(401);
+    expect(chaiHttpResponse.body).to.be.eqls({
+      message: 'Incorrect email or password'
     });
+  });
 });
 
 describe('Verifica a rota /login/validation', () => {
-  
-  before(async () => {
+  beforeEach(async () => {
     sinon
       .stub(Users, "findOne")
       .resolves({
@@ -111,7 +95,7 @@ describe('Verifica a rota /login/validation', () => {
         role: 'admin',
       } as Users);
   });
-  after(async ()=>{
+  afterEach(async ()=>{
     (Users.findOne as sinon.SinonStub).restore();
   });
   it('Quando o token é de um admin', async () => {
