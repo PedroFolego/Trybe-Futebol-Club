@@ -5,7 +5,7 @@ const teams = Router();
 
 const factory = () => {
   const model = new ();
-  const service = new (model);
+  const service = new TeamsController(model);
   const controller = new TeamsController(service);
 
   return controller;
