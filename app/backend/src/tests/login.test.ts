@@ -2,17 +2,9 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
-
 import { app } from '../app';
-
 import { Response } from 'superagent';
 import Users from '../database/models/users.model';
-import { after, before } from 'mocha';
-
-// import LoginController from '../controllers/login.controller'
-// import LoginService from '../services/login.service'
-// import UserRepository from '../repository/users.repo'
-
 
 chai.use(chaiHttp);
 
@@ -22,7 +14,7 @@ let chaiHttpResponse: Response;
 describe('Verifica a rota /login', () => {
   beforeEach(async () => {
     sinon
-      .stub(Users, "findOne")
+      .stub(Users, 'findOne')
       .resolves({
         email: 'admin@admin.com',
         password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW'
