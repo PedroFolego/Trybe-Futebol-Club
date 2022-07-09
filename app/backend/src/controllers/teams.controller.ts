@@ -3,5 +3,5 @@ import { ITeamsService } from '../interfaces/teams';
 export default class TeamsController {
   constructor(private service: ITeamsService) { }
 
-  getAll = () => this.service.getAll();
+  getAll = async () => this.service.getAll();
 }

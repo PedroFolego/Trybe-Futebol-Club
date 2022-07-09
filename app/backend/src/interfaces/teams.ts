@@ -1,5 +1,5 @@
 export interface ITeamsService {
-  getAll(): ITeams[]
+  getAll(): Promise<ITeams[]>
 }
 
 export interface ITeams {
@@ -8,5 +8,5 @@ export interface ITeams {
 }
 
 export interface ITeamsRepo {
-  getAll(): ITeams[]
+  getAll(): Promise<ITeams[]>
 }
