@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import statusMessage from '../utils';
+import statusMessage from '../utils/functions';
 import { ILoginService, JwtPayloadHandler } from '../interfaces/login';
 
 export default class LoginController {
