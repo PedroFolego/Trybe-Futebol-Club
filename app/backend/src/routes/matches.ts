@@ -14,6 +14,6 @@ const factory = () => {
 };
 
 matches.get('/', factory().getAll);
-// matches.get('/:id', factory().getOne);
+matches.get('/:id', factory().getOne);
 
 export default matches;

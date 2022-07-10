@@ -10,7 +10,9 @@ export default class MatchesService implements IMatchesService {
     const matches = await this.#repository.getAll();
     return matches;
   }
-  // async getOne(id: string): Promise<IMatches | null> {
-  //   return
-  // }
+
+  async getOne(id: string) {
+    const matche = await this.#repository.getOne(id);
+    return matche;
+  }
 }

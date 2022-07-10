@@ -12,5 +12,12 @@ export default class MatchesRepository implements IMatchesRepo {
     ] }) as unknown;
     return matches as IMatches[];
   }
-  // getOne(id: string): Promise<IMatches | null>
+
+  async getOne(id: string) {
+    const matche = await this.model.findByPk(Number(id), { include: [
+      { model: Teams, as: 'teamHome' },
+      { model: Teams, as: 'teamAway' },
+    ] }) as unknown;
+    return matche as IMatches;
+  }
 }
