@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 const { expect } = chai;
 let chaiHttpResponse: Response;
 
-describe('Verifica a rota /teams', () => {
+describe('Verifica a rota /matches GET', () => {
   const fakeResponse = [ 
     {
       id: 1,
@@ -57,4 +57,56 @@ describe('Verifica a rota /teams', () => {
     expect(chaiHttpResponse.status).to.be.equal(200);
     expect(chaiHttpResponse.body).to.be.eqls(fakeResponse);
   });
-})
+});
+describe('Verifica a rota /matches/:id quando existe uma partida', () => {
+  const fakeResponse = {
+    id: 1,
+    homeTeam: 16,
+    homeTeamGoals: 1,
+    awayTeam: 8,
+    awayTeamGoals: 1,
+    inProgress: false,
+    teamHome: {
+      teamName: "São Paulo"
+    },
+    teamAway: {
+      teamName: "Grêmio"
+    }
+  };
+  beforeEach(() => {
+    sinon
+      .stub(Matches, 'findOne')
+      .resolves(fakeResponse as unknown as Matches)
+  })
+  afterEach(() => {
+    (Matches.findOne as sinon.SinonStub).restore();
+  })
+  it('Um status 200 e a partida', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .get('/matches/1');
+
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.be.eqls(fakeResponse);
+  });
+});
+describe('Verifica a rota /matches/:id quando não existe uma partida', () => {
+  beforeEach(() => {
+    sinon
+      .stub(Matches, 'findOne')
+      .resolves(null)
+  })
+  afterEach(() => {
+    (Matches.findOne as sinon.SinonStub).restore();
+  })
+  it('Um status 404 e uma mensagem not found', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .get('/matches/9000');
+
+    expect(chaiHttpResponse.status).to.be.equal(404);
+    expect(chaiHttpResponse.body).to.be.eqls({
+     message: 'Matche not found'
+    });
+  });
+});
