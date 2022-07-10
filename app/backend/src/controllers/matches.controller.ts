@@ -9,6 +9,7 @@ export default class MatchesController {
   getAll = async (_req: Request, res: Response, next: NextFunction) => {
     try {
       const matches = await this.service.getAll();
+
       return res.status(StatusCodes.OK).json(matches);
     } catch (error) {
       next(error);
@@ -18,9 +19,9 @@ export default class MatchesController {
   // getOne = async (req: Request, res: Response, next: NextFunction) => {
   //   try {
   //     const { id } = req.params;
-  //     const team = await this.service.getOne(id);
-  //     if (!team) return next(statusMessage(StatusCodes.NOT_FOUND, 'Team not found'));
-  //     return res.status(StatusCodes.OK).json(team);
+  //     const matches = await this.service.getOne(id);
+  //     if (!matches) return next(statusMessage(StatusCodes.NOT_FOUND, 'Matche not found'));
+  //     return res.status(StatusCodes.OK).json(matches);
   //   } catch (error) {
   //     next(error);
   //   }

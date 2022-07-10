@@ -1,14 +1,14 @@
 import { DataTypes, Model } from 'sequelize';
 import db from '.';
-// import Teams from './teams.model';
+import Teams from './teams.model';
 
 class Matches extends Model {
   public id: number;
-  public homeTeam: string;
+  public homeTeam: number;
   public homeTeamGoals: number;
-  public awayTeam: string;
+  public awayTeam: number;
   public awayTeamGoals: number;
-  public inProgress: number;
+  public inProgress: boolean;
 }
 
 Matches.init({
@@ -35,7 +35,9 @@ Matches.init({
   * Associations 1:N devem ficar em uma das instâncias de modelo
   * */
 
-// Matches.belongsTo(Teams, { foreignKey: 'id', as: 'team' });
+Matches.belongsTo(Teams, { foreignKey: 'homeTeam', as: 'teamHome' });
+Matches.belongsTo(Teams, { foreignKey: 'awayTeam', as: 'teamAway' });
+
 // OtherModel.belongsTo(Example, { foreignKey: 'campoB', as: 'campoEstrangeiroB' });
 
 // Example.hasMany(OtherModel, { foreignKey: 'campoC', as: 'campoEstrangeiroC' });

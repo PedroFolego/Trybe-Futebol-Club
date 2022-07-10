@@ -1,6 +1,6 @@
 export interface IMatchesService {
   getAll(): Promise<IMatches[]>
-  getOne(id: string): Promise<IMatches | null>
+  // getOne(id: string): Promise<IMatches | null>
 }
 
 export interface IMatches {
@@ -20,5 +20,5 @@ export interface IMatches {
 
 export interface IMatchesRepo {
   getAll(): Promise<IMatches[]>
-  getOne(id: string): Promise<IMatches | null>
+  // getOne(id: string): Promise<IMatches | null>
 }
