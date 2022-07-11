@@ -33,6 +33,7 @@ export default class MatchesService implements IMatchesService {
 
     const matche = {
       id,
+      inProgress: true,
       ...body,
     };
     return matche;

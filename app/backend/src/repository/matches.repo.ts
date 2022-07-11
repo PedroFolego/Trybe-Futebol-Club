@@ -23,7 +23,9 @@ export default class MatchesRepository implements IMatchesRepo {
 
   async createMatche(body: ITeams): Promise<number> {
     const { homeTeam, awayTeam, awayTeamGoals, homeTeamGoals } = body;
-    const matche = await this.model.create({ homeTeam, awayTeam, awayTeamGoals, homeTeamGoals });
+    const matche = await this.model.create({
+      homeTeam, awayTeam, awayTeamGoals, homeTeamGoals, inProgress: true,
+    });
     return matche.id;
   }
 }
