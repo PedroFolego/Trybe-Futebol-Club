@@ -7,7 +7,7 @@ import { ILoginService } from '../interfaces/login';
 dotenv.config();
 
 export default class LoginService implements ILoginService {
-  jwtSecret: jwt.Secret;
+  private jwtSecret: jwt.Secret;
 
   constructor(private repository: RepositoryUser) {
     this.repository = repository;
@@ -30,8 +30,13 @@ export default class LoginService implements ILoginService {
     return token;
   }
 
-  getRole(token: string) {
+  verifyToken(token: string) {
     const user = jwt.verify(token, this.jwtSecret);
+    return user;
+  }
+
+  async findUserByEmail(email: string) {
+    const user = await this.repository.getUser(email);
     return user;
   }
 }

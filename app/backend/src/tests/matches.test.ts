@@ -5,6 +5,7 @@ import chaiHttp = require('chai-http');
 import { app } from '../app';
 import { Response } from 'superagent';
 import Matches from '../database/models/matches.model';
+import Users from '../database/models/users.model';
 
 chai.use(chaiHttp);
 
@@ -152,6 +153,89 @@ describe('Verifica a rota /matches GET com query string', () => {
     chaiHttpResponse = await chai
       .request(app)
       .get('/matches?inProgress=true');
+
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.be.eqls([{
+      id: 41,
+      homeTeam: 16,
+      homeTeamGoals: 2,
+      awayTeam: 9,
+      awayTeamGoals: 0,
+      inProgress: true,
+      teamHome: {
+        teamName: "São Paulo"
+      },
+      teamAway: {
+        teamName: "Internacional"
+      }
+    }]);
+  });
+  it('Um status 200 e um array com as partidas concluídas', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .get('/matches?inProgress=false');
+
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.be.eqls([{
+      id: 1,
+      homeTeam: 16,
+      homeTeamGoals: 1,
+      awayTeam: 8,
+      awayTeamGoals: 1,
+      inProgress: false,
+      teamHome: {
+        teamName: "São Paulo"
+      },
+      teamAway: {
+        teamName: "Grêmio"
+      }
+    }]);
+  });
+});
+describe('Verifica a rota /matches POST', () => {
+  const fakeResponse = [ 
+    {
+      id: 1,
+      homeTeam: 16,
+      homeTeamGoals: 1,
+      awayTeam: 8,
+      awayTeamGoals: 1,
+      inProgress: false,
+      teamHome: {
+        teamName: "São Paulo"
+      },
+      teamAway: {
+        teamName: "Grêmio"
+      }
+    }, {
+      id: 41,
+      homeTeam: 16,
+      homeTeamGoals: 2,
+      awayTeam: 9,
+      awayTeamGoals: 0,
+      inProgress: true,
+      teamHome: {
+        teamName: "São Paulo"
+      },
+      teamAway: {
+        teamName: "Internacional"
+      }
+    }
+  ] as unknown;
+  beforeEach(async () => {
+    sinon
+      .stub(Matches, 'create')
+      .resolves(fakeResponse as unknown as Matches)
+    sinon.stub(Users, 'findOne')
+      .resolves()
+  })
+  afterEach(async () => {
+    (Matches.findAll as sinon.SinonStub).restore();
+  })
+  it('Um status 201 e um objeto com a partida criada', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .post('/matches');
 
     expect(chaiHttpResponse.status).to.be.equal(200);
     expect(chaiHttpResponse.body).to.be.eqls([{

@@ -38,7 +38,7 @@ export default class LoginController {
   getRoleUser = (req: Request, res: Response, next: NextFunction) => {
     try {
       const token = req.headers.authorization as string;
-      const { data: { role } } = this.service.getRole(token) as JwtPayloadHandler;
+      const { data: { role } } = this.service.verifyToken(token) as JwtPayloadHandler;
       return res.status(StatusCodes.OK).json({ role });
     } catch (error) {
       next(error);
