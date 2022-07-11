@@ -32,4 +32,14 @@ export default class MatchesController {
       next(error);
     }
   };
+
+  createMatche = async (req:Request, res: Response, next: NextFunction) => {
+    try {
+      const { body } = req;
+      const matche = this.service.createMatche(body);
+      return res.status(StatusCodes.CREATED).json(matche);
+    } catch (error) {
+      next(error);
+    }
+  };
 }

@@ -1,4 +1,4 @@
-import { IMatchesRepo, IMatchesService } from '../interfaces/matches';
+import { IMatchesRepo, IMatchesService, ITeams } from '../interfaces/matches';
 
 export default class MatchesService implements IMatchesService {
   #repository: IMatchesRepo;
@@ -19,5 +19,20 @@ export default class MatchesService implements IMatchesService {
   async getInProgress(progress: boolean) {
     const matches = await this.getAll();
     return matches.filter((matche) => matche.inProgress === progress);
+  }
+
+  async createMatche(body: ITeams) {
+    const { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals } = body;
+    const id = await this.#repository.createMatche({
+      homeTeam,
+      homeTeamGoals,
+      awayTeam,
+      awayTeamGoals,
+    });
+    const matche = {
+      id,
+      ...body,
+    };
+    return matche;
   }
 }

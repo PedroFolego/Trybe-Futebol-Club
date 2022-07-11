@@ -15,5 +15,6 @@ const factory = () => {
 
 matches.get('/', factory().getInProgressOrAll);
 matches.get('/:id', factory().getOne);
+matches.post('', factory().createMatche);
 
 export default matches;

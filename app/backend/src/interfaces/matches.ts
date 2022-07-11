@@ -2,14 +2,23 @@ export interface IMatchesService {
   getAll(): Promise<IMatche[]>
   getOne(id: string): Promise<IMatche | null>
   getInProgress(progress: boolean): Promise<IMatche[]>
+  createMatche(body: ITeams): Promise<ITeamsId>
 }
 
-export interface IMatche {
-  id: number
+export interface IMatchesRepo {
+  getAll(): Promise<IMatche[]>
+  getOne(id: string): Promise<IMatche | null>
+  createMatche(body: ITeams): Promise<number>
+}
+
+export interface ITeams {
   homeTeam: number
   homeTeamGoals: number
   awayTeam: number
   awayTeamGoals: number
+}
+
+export interface IMatche extends ITeams, IIdMatche {
   inProgress: boolean
   teamHome: {
     teamName: string
@@ -19,7 +28,8 @@ export interface IMatche {
   }
 }
 
-export interface IMatchesRepo {
-  getAll(): Promise<IMatche[]>
-  getOne(id: string): Promise<IMatche | null>
+export interface IIdMatche {
+  id: number
 }
+
+export interface ITeamsId extends IIdMatche, ITeams { }
