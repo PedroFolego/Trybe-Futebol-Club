@@ -47,9 +47,12 @@ export default class MatchesService implements IMatchesService {
   }
 
   async validateTeams(idTeams: number[]) {
-    const valid = idTeams
-      .every(async (id) => this.#repoTeam.getOne(id));
-    return valid;
+    const valid = await Promise.all(idTeams
+      .map(async (id) => {
+        const user = await this.#repoTeam.getOne(id);
+        return user;
+      }));
+    return valid.every((user) => user);
   }
 
   async updateGoals(homeTeamGoals: number, awayTeamGoals: number, id: number) {
