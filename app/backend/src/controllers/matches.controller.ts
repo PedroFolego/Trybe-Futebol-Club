@@ -25,4 +25,7 @@ export default class MatchesController {
       next(error);
     }
   };
+
+  getInProgress = async (req: Request, res: Response, next: NextFunction) => {
+  };
 }

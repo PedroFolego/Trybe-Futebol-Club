@@ -1,9 +1,9 @@
 export interface IMatchesService {
-  getAll(): Promise<IMatches[]>
-  getOne(id: string): Promise<IMatches | null>
+  getAll(): Promise<IMatche[]>
+  getOne(id: string): Promise<IMatche | null>
 }
 
-export interface IMatches {
+export interface IMatche {
   id: number
   homeTeam: number
   homeTeamGoals: number
@@ -19,6 +19,6 @@ export interface IMatches {
 }
 
 export interface IMatchesRepo {
-  getAll(): Promise<IMatches[]>
-  getOne(id: string): Promise<IMatches | null>
+  getAll(): Promise<IMatche[]>
+  getOne(id: string): Promise<IMatche | null>
 }

@@ -110,3 +110,84 @@ describe('Verifica a rota /matches/:id quando não existe uma partida', () => {
     });
   });
 });
+describe('Verifica a rota /matches GET com query string', () => {
+  const fakeResponse = [ 
+    {
+      id: 1,
+      homeTeam: 16,
+      homeTeamGoals: 1,
+      awayTeam: 8,
+      awayTeamGoals: 1,
+      inProgress: false,
+      teamHome: {
+        teamName: "São Paulo"
+      },
+      teamAway: {
+        teamName: "Grêmio"
+      }
+    }, {
+      id: 41,
+      homeTeam: 16,
+      homeTeamGoals: 2,
+      awayTeam: 9,
+      awayTeamGoals: 0,
+      inProgress: true,
+      teamHome: {
+        teamName: "São Paulo"
+      },
+      teamAway: {
+        teamName: "Internacional"
+      }
+    }
+  ] as unknown;
+  beforeEach(async () => {
+    sinon
+      .stub(Matches, 'findAll')
+      .resolves(fakeResponse as Matches[])
+  })
+  afterEach(async () => {
+    (Matches.findAll as sinon.SinonStub).restore();
+  })
+  it('Um status 200 e um array com as partidas em andamento', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .get('/matches?inProgress=true');
+
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.be.eqls([{
+      id: 41,
+      homeTeam: 16,
+      homeTeamGoals: 2,
+      awayTeam: 9,
+      awayTeamGoals: 0,
+      inProgress: true,
+      teamHome: {
+        teamName: "São Paulo"
+      },
+      teamAway: {
+        teamName: "Internacional"
+      }
+    }]);
+  });
+  it('Um status 200 e um array com as partidas concluídas', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .get('/matches?inProgress=false');
+
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.be.eqls([{
+      id: 1,
+      homeTeam: 16,
+      homeTeamGoals: 1,
+      awayTeam: 8,
+      awayTeamGoals: 1,
+      inProgress: false,
+      teamHome: {
+        teamName: "São Paulo"
+      },
+      teamAway: {
+        teamName: "Grêmio"
+      }
+    }]);
+  });
+});

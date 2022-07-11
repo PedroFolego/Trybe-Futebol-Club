@@ -1,6 +1,6 @@
 import Teams from '../database/models/teams.model';
 import Matches from '../database/models/matches.model';
-import { IMatchesRepo, IMatches } from '../interfaces/matches';
+import { IMatchesRepo, IMatche } from '../interfaces/matches';
 
 export default class MatchesRepository implements IMatchesRepo {
   constructor(private model = Matches) { }
@@ -10,7 +10,7 @@ export default class MatchesRepository implements IMatchesRepo {
       { model: Teams, as: 'teamHome' },
       { model: Teams, as: 'teamAway' },
     ] }) as unknown;
-    return matches as IMatches[];
+    return matches as IMatche[];
   }
 
   async getOne(id: string) {
@@ -18,6 +18,6 @@ export default class MatchesRepository implements IMatchesRepo {
       { model: Teams, as: 'teamHome' },
       { model: Teams, as: 'teamAway' },
     ] }) as unknown;
-    return matche as IMatches;
+    return matche as IMatche;
   }
 }
