@@ -6,6 +6,7 @@ import { app } from '../app';
 import { Response } from 'superagent';
 import Matches from '../database/models/matches.model';
 import Users from '../database/models/users.model';
+import * as jwt from 'jsonwebtoken';
 
 chai.use(chaiHttp);
 
@@ -192,104 +193,89 @@ describe('Verifica a rota /matches GET com query string', () => {
     }]);
   });
 });
-describe('Verifica a rota /matches POST', () => {
-  const fakeResponse = [ 
-    {
-      id: 1,
-      homeTeam: 16,
-      homeTeamGoals: 1,
-      awayTeam: 8,
-      awayTeamGoals: 1,
-      inProgress: false,
-      teamHome: {
-        teamName: "São Paulo"
-      },
-      teamAway: {
-        teamName: "Grêmio"
-      }
-    }, {
-      id: 41,
-      homeTeam: 16,
-      homeTeamGoals: 2,
-      awayTeam: 9,
-      awayTeamGoals: 0,
-      inProgress: true,
-      teamHome: {
-        teamName: "São Paulo"
-      },
-      teamAway: {
-        teamName: "Internacional"
-      }
-    }
-  ] as unknown;
-  beforeEach(async () => {
-    sinon
-      .stub(Matches, 'create')
-      .resolves(fakeResponse as Matches)
-    sinon.stub(Users, 'findOne')
-      .resolves()
-  })
-  afterEach(async () => {
-    (Matches.findAll as sinon.SinonStub).restore();
-  })
-  it('Um status 201 e um objeto com a partida criada', async () => {
-    chaiHttpResponse = await chai
-      .request(app)
-      .post('/matches');
-
-    expect(chaiHttpResponse.status).to.be.equal(200);
-    expect(chaiHttpResponse.body).to.be.eqls([{
-      id: 41,
-      homeTeam: 16,
-      homeTeamGoals: 2,
-      awayTeam: 9,
-      awayTeamGoals: 0,
-      inProgress: true,
-      teamHome: {
-        teamName: "São Paulo"
-      },
-      teamAway: {
-        teamName: "Internacional"
-      }
-    }]);
-  });
-  it('Um status 200 e um array com as partidas concluídas', async () => {
-    chaiHttpResponse = await chai
-      .request(app)
-      .get('/matches?inProgress=false');
-
-    expect(chaiHttpResponse.status).to.be.equal(200);
-    expect(chaiHttpResponse.body).to.be.eqls([{
-      id: 1,
-      homeTeam: 16,
-      homeTeamGoals: 1,
-      awayTeam: 8,
-      awayTeamGoals: 1,
-      inProgress: false,
-      teamHome: {
-        teamName: "São Paulo"
-      },
-      teamAway: {
-        teamName: "Grêmio"
-      }
-    }]);
-  });
-});
 describe('Verifica a rota /matches/:id/finish PATCH', () => {
   beforeEach(async () => {
     sinon
-      .stub(Matches, 'create')
+      .stub(Matches, 'update')
       .resolves()
   })
   afterEach(async () => {
-    (Matches.findAll as sinon.SinonStub).restore();
+    (Matches.update as sinon.SinonStub).restore();
   })
   it('Um status 200 e uma mensagem de finalizado', async () => {
     chaiHttpResponse = await chai
       .request(app)
-      .get('/matches/23/finish');
+      .patch('/matches/23/finish');
 
     expect(chaiHttpResponse.status).to.be.equal(200);
     expect(chaiHttpResponse.body).to.be.eqls({ message: 'Finished' });
   });
-})
+});
+// describe('Verifica a rota /matches POST quando ', () => {
+//   const fakeResponse = [ 
+//     {
+//       id: 1,
+//       homeTeam: 16,
+//       homeTeamGoals: 1,
+//       awayTeam: 8,
+//       awayTeamGoals: 1,
+//       inProgress: false,
+//       teamHome: {
+//         teamName: "São Paulo"
+//       },
+//       teamAway: {
+//         teamName: "Grêmio"
+//       }
+//     }, {
+//       id: 41,
+//       homeTeam: 16,
+//       homeTeamGoals: 2,
+//       awayTeam: 9,
+//       awayTeamGoals: 0,
+//       inProgress: true,
+//       teamHome: {
+//         teamName: "São Paulo"
+//       },
+//       teamAway: {
+//         teamName: "Internacional"
+//       }
+//     }
+//   ] as unknown;
+//   beforeEach(async () => {
+//     sinon
+//       .stub(Matches, 'create')
+//       .resolves(fakeResponse as Matches)
+//     sinon.stub(Users, 'findOne')
+//       .resolves({
+//         email: 'admin@admin.com',
+//         password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW'
+//       } as Users)
+//     sinon.stub(jwt, 'verify')
+//       .resolves()
+//   })
+//   afterEach(async () => {
+//     (Matches.create as sinon.SinonStub).restore();
+//     (Users.findOne as sinon.SinonStub).restore();
+//   })
+//   it('Um status 201 e um objeto com a partida criada', async () => {
+//     chaiHttpResponse = await chai
+//       .request(app)
+//       .post('/matches')
+//       .send({
+//         homeTeam: 16,
+//         homeTeamGoals: 2,
+//         awayTeam: 9,
+//         awayTeamGoals: 0,
+//       });
+
+//     expect(chaiHttpResponse.status).to.be.equal(201);
+//     expect(chaiHttpResponse.body).to.be.eqls({
+//       id: 41,
+//       homeTeam: 16,
+//       homeTeamGoals: 2,
+//       awayTeam: 9,
+//       awayTeamGoals: 0,
+//       inProgress: true,
+//     });
+//   });
+// });
