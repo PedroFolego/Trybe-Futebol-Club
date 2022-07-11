@@ -13,7 +13,7 @@ const factory = () => {
   return controller;
 };
 
-matches.get('/', factory().getAll);
+matches.get('/', factory().getInProgressOrAll);
 matches.get('/:id', factory().getOne);
 
 export default matches;

@@ -15,4 +15,9 @@ export default class MatchesService implements IMatchesService {
     const matche = await this.#repository.getOne(id);
     return matche;
   }
+
+  async getInProgress(progress: boolean) {
+    const matches = await this.getAll();
+    return matches.filter((matche) => matche.inProgress === progress);
+  }
 }

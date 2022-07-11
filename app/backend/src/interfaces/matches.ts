@@ -1,6 +1,7 @@
 export interface IMatchesService {
   getAll(): Promise<IMatche[]>
   getOne(id: string): Promise<IMatche | null>
+  getInProgress(progress: boolean): Promise<IMatche[]>
 }
 
 export interface IMatche {
