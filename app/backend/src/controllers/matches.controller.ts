@@ -42,4 +42,14 @@ export default class MatchesController {
       next(error);
     }
   };
+
+  updateProgressMatch = async (req:Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      this.service.updateProgressMatch(Number(id));
+      return res.status(StatusCodes.OK).json({ message: 'Finished' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }

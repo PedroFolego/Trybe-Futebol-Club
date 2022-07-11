@@ -3,12 +3,14 @@ export interface IMatchesService {
   getOne(id: string): Promise<IMatche | null>
   getInProgress(progress: boolean): Promise<IMatche[]>
   createMatche(body: ITeams): Promise<ITeamsId>
+  updateProgressMatch(id: number): void
 }
 
 export interface IMatchesRepo {
   getAll(): Promise<IMatche[]>
   getOne(id: string): Promise<IMatche | null>
   createMatche(body: ITeams): Promise<number>
+  updateProgressMatch(id: number): void
 }
 
 export interface ITeams {

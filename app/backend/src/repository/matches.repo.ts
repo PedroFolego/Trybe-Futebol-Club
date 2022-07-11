@@ -21,11 +21,15 @@ export default class MatchesRepository implements IMatchesRepo {
     return matche as IMatche;
   }
 
-  async createMatche(body: ITeams): Promise<number> {
+  async createMatche(body: ITeams) {
     const { homeTeam, awayTeam, awayTeamGoals, homeTeamGoals } = body;
     const matche = await this.model.create({
       homeTeam, awayTeam, awayTeamGoals, homeTeamGoals, inProgress: true,
     });
     return matche.id;
+  }
+
+  async updateProgressMatch(id: number) {
+    await this.model.update({ inProgress: false }, { where: { id } });
   }
 }

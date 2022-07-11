@@ -15,6 +15,7 @@ const factory = () => {
 };
 
 matches.get('/', factory().getInProgressOrAll);
+matches.patch('/:id/finish', factory().updateProgressMatch);
 matches.get('/:id', factory().getOne);
 matches.post('', tokenValidation, factory().createMatche);
 

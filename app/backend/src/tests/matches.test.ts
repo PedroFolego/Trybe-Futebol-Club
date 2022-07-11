@@ -275,3 +275,21 @@ describe('Verifica a rota /matches POST', () => {
     }]);
   });
 });
+describe('Verifica a rota /matches/:id/finish PATCH', () => {
+  beforeEach(async () => {
+    sinon
+      .stub(Matches, 'create')
+      .resolves()
+  })
+  afterEach(async () => {
+    (Matches.findAll as sinon.SinonStub).restore();
+  })
+  it('Um status 200 e uma mensagem de finalizado', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .get('/matches/23/finish');
+
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.be.eqls({ message: 'Finished' });
+  });
+})

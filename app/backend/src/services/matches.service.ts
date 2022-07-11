@@ -38,4 +38,8 @@ export default class MatchesService implements IMatchesService {
     };
     return matche;
   }
+
+  async updateProgressMatch(id: number) {
+    this.#repository.updateProgressMatch(id);
+  }
 }
