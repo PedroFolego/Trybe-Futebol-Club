@@ -5,13 +5,13 @@ import { JwtPayloadHandler } from '../interfaces/login';
 import UserRepository from '../repository/users.repo';
 import LoginService from '../services/login.service';
 
-const tokenValidation = (req: Request, _res: Response, next:NextFunction) => {
+const tokenValidation = async (req: Request, _res: Response, next:NextFunction) => {
   const { authorization } = req.headers;
   if (!authorization) return next(statusMessage(StatusCodes.UNAUTHORIZED, 'Token not found'));
   try {
     const serviceLogin = new LoginService(new UserRepository());
     const { data } = serviceLogin.verifyToken(authorization) as JwtPayloadHandler;
-    const user = serviceLogin.verifyToken(data.email);
+    const user = await serviceLogin.findUserByEmail(data.email);
     if (!user) throw new Error();
     next();
   } catch (error) {

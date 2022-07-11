@@ -36,7 +36,7 @@ export default class MatchesController {
   createMatche = async (req:Request, res: Response, next: NextFunction) => {
     try {
       const { body } = req;
-      const matche = this.service.createMatche(body);
+      const matche = await this.service.createMatche(body);
       return res.status(StatusCodes.CREATED).json(matche);
     } catch (error) {
       next(error);

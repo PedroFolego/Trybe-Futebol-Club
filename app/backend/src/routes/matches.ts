@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import tokenValidation from '../middleware/tokenValidation';
 import MatchesController from '../controllers/matches.controller';
 import MatchesService from '../services/matches.service';
 import MatchesRepository from '../repository/matches.repo';
@@ -15,6 +16,6 @@ const factory = () => {
 
 matches.get('/', factory().getInProgressOrAll);
 matches.get('/:id', factory().getOne);
-matches.post('', factory().createMatche);
+matches.post('', tokenValidation, factory().createMatche);
 
 export default matches;

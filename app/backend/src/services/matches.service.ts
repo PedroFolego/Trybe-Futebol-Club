@@ -23,12 +23,14 @@ export default class MatchesService implements IMatchesService {
 
   async createMatche(body: ITeams) {
     const { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals } = body;
+
     const id = await this.#repository.createMatche({
       homeTeam,
       homeTeamGoals,
       awayTeam,
       awayTeamGoals,
     });
+
     const matche = {
       id,
       ...body,

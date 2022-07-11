@@ -225,7 +225,7 @@ describe('Verifica a rota /matches POST', () => {
   beforeEach(async () => {
     sinon
       .stub(Matches, 'create')
-      .resolves(fakeResponse as unknown as Matches)
+      .resolves(fakeResponse as Matches)
     sinon.stub(Users, 'findOne')
       .resolves()
   })
