@@ -1,18 +1,21 @@
+import { ITeamsRepo } from '../interfaces/teams';
 import { IMatchesRepo, IMatchesService, ITeams } from '../interfaces/matches';
 
 export default class MatchesService implements IMatchesService {
-  #repository: IMatchesRepo;
-  constructor(repository: IMatchesRepo) {
-    this.#repository = repository;
+  #repoMatche: IMatchesRepo;
+  #repoTeam: ITeamsRepo;
+  constructor(repoMatche: IMatchesRepo, repoTeam: ITeamsRepo) {
+    this.#repoMatche = repoMatche;
+    this.#repoTeam = repoTeam;
   }
 
   async getAll() {
-    const matches = await this.#repository.getAll();
+    const matches = await this.#repoMatche.getAll();
     return matches;
   }
 
   async getOne(id: string) {
-    const matche = await this.#repository.getOne(id);
+    const matche = await this.#repoMatche.getOne(id);
     return matche;
   }
 
@@ -24,7 +27,7 @@ export default class MatchesService implements IMatchesService {
   async createMatche(body: ITeams) {
     const { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals } = body;
 
-    const id = await this.#repository.createMatche({
+    const id = await this.#repoMatche.createMatche({
       homeTeam,
       homeTeamGoals,
       awayTeam,
@@ -40,6 +43,12 @@ export default class MatchesService implements IMatchesService {
   }
 
   async updateProgressMatch(id: number) {
-    this.#repository.updateProgressMatch(id);
+    this.#repoMatche.updateProgressMatch(id);
+  }
+
+  async validateTeams(idTeams: number[]) {
+    const valid = idTeams
+      .every(async (id) => this.#repoTeam.getOne(id));
+    return valid;
   }
 }

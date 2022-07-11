@@ -4,6 +4,7 @@ export interface IMatchesService {
   getInProgress(progress: boolean): Promise<IMatche[]>
   createMatche(body: ITeams): Promise<ITeamsId>
   updateProgressMatch(id: number): void
+  validateTeams(team: number[]): Promise<boolean>
 }
 
 export interface IMatchesRepo {

@@ -52,4 +52,25 @@ export default class MatchesController {
       next(error);
     }
   };
+
+  validateReqMatche = async (req:Request, _res: Response, next: NextFunction) => {
+    try {
+      const { homeTeam, awayTeam } = req.body;
+      if (homeTeam === awayTeam) {
+        return next(
+          statusMessage(
+            StatusCodes.UNAUTHORIZED,
+            'It is not possible to create a match with two equal teams',
+          ),
+        );
+      }
+      const valid = await this.service.validateTeams([Number(homeTeam), Number(awayTeam)]);
+      if (!valid) {
+        return next(statusMessage(StatusCodes.NOT_FOUND, 'There is no team with such id!'));
+      }
+      return next();
+    } catch (error) {
+      next(error);
+    }
+  };
 }

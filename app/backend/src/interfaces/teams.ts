@@ -10,5 +10,5 @@ export interface ITeam {
 
 export interface ITeamsRepo {
   getAll(): Promise<ITeam[]>
-  getOne(id: string): Promise<ITeam | null>
+  getOne(id: number): Promise<ITeam | null>
 }

@@ -5,5 +5,5 @@ export default class TeamsService implements ITeamsService {
 
   getAll = async () => this.repository.getAll();
 
-  getOne = async (id: string) => this.repository.getOne(id);
+  getOne = async (id: string) => this.repository.getOne(Number(id));
 }
