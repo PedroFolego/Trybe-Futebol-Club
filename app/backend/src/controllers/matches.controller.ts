@@ -73,4 +73,15 @@ export default class MatchesController {
       next(error);
     }
   };
+
+  updateGoals = async (req:Request, res: Response, next: NextFunction) => {
+    try {
+      const { homeTeamGoals, awayTeamGoals } = req.body;
+      const { id } = req.params;
+      this.service.updateGoals(homeTeamGoals, awayTeamGoals, Number(id));
+      return res.status(StatusCodes.OK).json({ message: 'All done' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }

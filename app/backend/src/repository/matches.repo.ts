@@ -32,4 +32,8 @@ export default class MatchesRepository implements IMatchesRepo {
   async updateProgressMatch(id: number) {
     await this.model.update({ inProgress: false }, { where: { id } });
   }
+
+  async updateGoals(homeTeamGoals: number, awayTeamGoals: number, id: number) {
+    await this.model.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+  }
 }

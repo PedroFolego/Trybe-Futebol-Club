@@ -51,4 +51,8 @@ export default class MatchesService implements IMatchesService {
       .every(async (id) => this.#repoTeam.getOne(id));
     return valid;
   }
+
+  async updateGoals(homeTeamGoals: number, awayTeamGoals: number, id: number) {
+    this.#repoMatche.updateGoals(homeTeamGoals, awayTeamGoals, id);
+  }
 }

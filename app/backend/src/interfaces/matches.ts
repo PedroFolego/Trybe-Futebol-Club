@@ -5,6 +5,7 @@ export interface IMatchesService {
   createMatche(body: ITeams): Promise<ITeamsId>
   updateProgressMatch(id: number): void
   validateTeams(team: number[]): Promise<boolean>
+  updateGoals(homeTeamGoals: number, awayTeamGoals: number, id: number): void
 }
 
 export interface IMatchesRepo {
@@ -12,6 +13,7 @@ export interface IMatchesRepo {
   getOne(id: string): Promise<IMatche | null>
   createMatche(body: ITeams): Promise<number>
   updateProgressMatch(id: number): void
+  updateGoals(homeTeamGoals: number, awayTeamGoals: number, id: number): void
 }
 
 export interface ITeams {
