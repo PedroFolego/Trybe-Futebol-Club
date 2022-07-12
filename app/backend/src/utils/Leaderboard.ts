@@ -1,6 +1,7 @@
+import { ILeaderboard } from '../interfaces/leaderboard';
 import { IMatche } from '../interfaces/matches';
 
-export default class LeaderboardTeam {
+export default class LeaderboardTeam implements ILeaderboard {
   name: string;
   totalPoints: number;
   totalGames: number;
