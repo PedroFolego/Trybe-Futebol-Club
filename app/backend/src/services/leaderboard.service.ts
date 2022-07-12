@@ -32,7 +32,12 @@ export default class LeaderboardService implements ILeaderboardService {
   async orderLeaderboard() {
     await this.getLeaderboard();
 
-    const sort = this.leaderboard.sort((a, b) => a.totalPoints - b.totalPoints);
+    const sort = this.leaderboard.sort((a, b) =>
+      b.totalVictories - a.totalVictories
+      || b.goalsBalance - a.goalsBalance
+      || b.goalsFavor - a.goalsFavor
+      || a.goalsOwn - b.goalsOwn);
+
     return sort;
   }
 }
