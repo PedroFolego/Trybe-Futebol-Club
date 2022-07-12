@@ -1,7 +1,7 @@
 import { ITeamsService } from '../interfaces/teams';
 import { IMatchesService } from '../interfaces/matches';
-import LeaderboardTeam from '../utils/Leaderboard';
-import { ILeaderboard, ILeaderboardService } from '../interfaces/leaderboard';
+import {
+  IConstructorLeaderboard, ILeaderboard, ILeaderboardService } from '../interfaces/leaderboard';
 
 export default class LeaderboardService implements ILeaderboardService {
   #serviceMatche: IMatchesService;
@@ -14,23 +14,23 @@ export default class LeaderboardService implements ILeaderboardService {
     this.leaderboard = [];
   }
 
-  private async getLeaderboard() {
+  private async getLeaderboard(type: 'home' | 'away', ClassLeaderboard: IConstructorLeaderboard) {
     const teams = await this.#serviceTeam.getAll();
     const matches = await this.#serviceMatche.getInProgress(false);
 
     teams.forEach((team) => {
       const matchesTeam = matches
         .filter((match) => {
-          const a = match.homeTeam === team.id;
+          const a = (match[`${type}Team`]) === team.id;
           return a;
         });
 
-      this.leaderboard.push(new LeaderboardTeam(matchesTeam));
+      this.leaderboard.push(new ClassLeaderboard(matchesTeam));
     });
   }
 
-  async orderLeaderboard() {
-    await this.getLeaderboard();
+  async orderLeaderboard(type: 'home' | 'away', ClassLeaderboard: IConstructorLeaderboard) {
+    await this.getLeaderboard(type, ClassLeaderboard);
 
     const sort = this.leaderboard.sort((a, b) =>
       b.totalPoints - a.totalPoints

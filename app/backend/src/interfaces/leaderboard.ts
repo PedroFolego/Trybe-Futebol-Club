@@ -1,3 +1,5 @@
+import { IMatche } from './matches';
+
 export interface ILeaderboard {
   name: string;
   totalPoints: number;
@@ -11,6 +13,13 @@ export interface ILeaderboard {
   efficiency:number;
 }
 
+export interface IConstructorLeaderboard {
+  new(leaderboard: IMatche[]): ILeaderboard
+}
+
 export interface ILeaderboardService {
-  orderLeaderboard(): Promise<ILeaderboard[]>
+  orderLeaderboard(
+    type: 'home' | 'away', ClassLeaderboard: IConstructorLeaderboard
+  ): Promise<ILeaderboard[]>
+  // getLeaderboard(): void
 }

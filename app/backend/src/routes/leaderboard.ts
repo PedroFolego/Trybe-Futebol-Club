@@ -20,6 +20,7 @@ const factory = () => {
   return controller;
 };
 
-leaderboard.get('/home', factory().getAll);
+leaderboard.get('/home', factory().getAllHome);
+leaderboard.get('/away', factory().getAllAway);
 
 export default leaderboard;
