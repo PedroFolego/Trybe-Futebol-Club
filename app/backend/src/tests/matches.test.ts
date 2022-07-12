@@ -241,6 +241,75 @@ describe('Verifica a rota /matches/:id PATCH', () => {
     expect(chaiHttpResponse.status).to.be.equal(400)
     expect(chaiHttpResponse.body).to.be.eqls({ message: 'Missing body' })
   })
+});
+describe('Verifica a rota /matches/:id PATCH', () => {
+  const fakeResponse = [
+    {
+      "name": "Palmeiras",
+      "totalPoints": 13,
+      "totalGames": 5,
+      "totalVictories": 4,
+      "totalDraws": 1,
+      "totalLosses": 0,
+      "goalsFavor": 17,
+      "goalsOwn": 5,
+      "goalsBalance": 12,
+      "efficiency": 86.67
+    },
+    {
+      "name": "Corinthians",
+      "totalPoints": 12,
+      "totalGames": 5,
+      "totalVictories": 4,
+      "totalDraws": 0,
+      "totalLosses": 1,
+      "goalsFavor": 12,
+      "goalsOwn": 3,
+      "goalsBalance": 9,
+      "efficiency": 80
+    },
+    {
+      "name": "Santos",
+      "totalPoints": 11,
+      "totalGames": 5,
+      "totalVictories": 3,
+      "totalDraws": 2,
+      "totalLosses": 0,
+      "goalsFavor": 12,
+      "goalsOwn": 6,
+      "goalsBalance": 6,
+      "efficiency": 73.33
+    },
+  ]
+  beforeEach(() => {
+    sinon
+      .stub(Matches, 'update')
+      .resolves()
+  })
+  afterEach(() => {
+    (Matches.update as sinon.SinonStub).restore();
+  })
+  it('Um status 200 e uma mensagem de concluído', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .patch('/matches/2')
+      .send({
+        "homeTeamGoals": 2,
+        "awayTeamGoals": 2
+      })
+    expect(chaiHttpResponse.status).to.be.equal(200)
+    expect(chaiHttpResponse.body).to.be.eqls({ message: 'All done' })
+  })
+  it('Um status 400 e uma mensagem de corpo faltando', async () => {
+    chaiHttpResponse = await chai  
+      .request(app)
+      .patch('/matches/2')
+      .send({
+        "homeTeamGoals": 2,
+      })
+    expect(chaiHttpResponse.status).to.be.equal(400)
+    expect(chaiHttpResponse.body).to.be.eqls({ message: 'Missing body' })
+  })
 })
 // describe('Verifica a rota /matches POST quando ', () => {
 //   const fakeResponse = [ 
