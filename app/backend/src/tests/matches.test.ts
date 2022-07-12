@@ -211,6 +211,37 @@ describe('Verifica a rota /matches/:id/finish PATCH', () => {
     expect(chaiHttpResponse.body).to.be.eqls({ message: 'Finished' });
   });
 });
+describe('Verifica a rota /matches/:id PATCH', () => {
+  beforeEach(() => {
+    sinon
+      .stub(Matches, 'update')
+      .resolves()
+  })
+  afterEach(() => {
+    (Matches.update as sinon.SinonStub).restore();
+  })
+  it('Um status 200 e uma mensagem de concluído', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .patch('/matches/2')
+      .send({
+        "homeTeamGoals": 2,
+        "awayTeamGoals": 2
+      })
+    expect(chaiHttpResponse.status).to.be.equal(200)
+    expect(chaiHttpResponse.body).to.be.eqls({ message: 'All done' })
+  })
+  it('Um status 400 e uma mensagem de corpo faltando', async () => {
+    chaiHttpResponse = await chai  
+      .request(app)
+      .patch('/matches/2')
+      .send({
+        "homeTeamGoals": 2,
+      })
+    expect(chaiHttpResponse.status).to.be.equal(400)
+    expect(chaiHttpResponse.body).to.be.eqls({ message: 'Missing body' })
+  })
+})
 // describe('Verifica a rota /matches POST quando ', () => {
 //   const fakeResponse = [ 
 //     {

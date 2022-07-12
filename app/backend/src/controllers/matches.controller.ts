@@ -77,6 +77,10 @@ export default class MatchesController {
   updateGoals = async (req:Request, res: Response, next: NextFunction) => {
     try {
       const { homeTeamGoals, awayTeamGoals } = req.body;
+
+      if (!homeTeamGoals || !awayTeamGoals) {
+        return next(statusMessage(StatusCodes.BAD_REQUEST, 'Missing body'));
+      }
       const { id } = req.params;
       this.service.updateGoals(homeTeamGoals, awayTeamGoals, Number(id));
       return res.status(StatusCodes.OK).json({ message: 'All done' });
