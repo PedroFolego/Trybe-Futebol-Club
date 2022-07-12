@@ -10,3 +10,7 @@ export interface ILeaderboard {
   goalsBalance: number;
   efficiency:number;
 }
+
+export interface ILeaderboardService {
+  orderLeaderboard(): Promise<ILeaderboard[]>
+}

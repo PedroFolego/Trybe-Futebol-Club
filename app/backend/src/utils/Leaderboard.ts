@@ -17,7 +17,16 @@ export default class LeaderboardTeam implements ILeaderboard {
   constructor(matches: IMatche[]) {
     this.#matches = matches;
     this.name = this.#matches[0].teamHome.teamName;
-    this.totalGames = this.#matches.length;
+    this.totalPoints = 0;
+    this.totalGames = 0;
+    this.totalVictories = 0;
+    this.totalDraws = 0;
+    this.totalLosses = 0;
+    this.goalsFavor = 0;
+    this.goalsOwn = 0;
+    this.goalsBalance = 0;
+    this.efficiency = 0;
+    this.getGames();
     this.getTotalScore();
     this.getGoals();
     this.getEfficiency();
@@ -25,10 +34,10 @@ export default class LeaderboardTeam implements ILeaderboard {
 
   private getTotalScore() {
     this.#matches.forEach((match) => {
-      if (match.homeTeam > match.awayTeam) {
+      if (match.homeTeamGoals > match.awayTeamGoals) {
         this.totalPoints += 3;
         this.totalVictories += 1;
-      } else if (match.homeTeam === match.awayTeam) {
+      } else if (match.homeTeamGoals === match.awayTeamGoals) {
         this.totalPoints += 1;
         this.totalDraws += 1;
       } else {
@@ -45,5 +54,9 @@ export default class LeaderboardTeam implements ILeaderboard {
 
   private getEfficiency() {
     this.efficiency = parseFloat(((this.totalPoints / (this.totalGames * 3)) * 100).toFixed(2));
+  }
+
+  private getGames() {
+    this.totalGames = this.#matches.length;
   }
 }
