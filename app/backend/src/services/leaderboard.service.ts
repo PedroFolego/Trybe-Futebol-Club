@@ -33,10 +33,11 @@ export default class LeaderboardService implements ILeaderboardService {
     await this.getLeaderboard();
 
     const sort = this.leaderboard.sort((a, b) =>
-      b.totalVictories - a.totalVictories
+      b.totalPoints - a.totalPoints
+      || b.totalVictories - a.totalVictories
       || b.goalsBalance - a.goalsBalance
       || b.goalsFavor - a.goalsFavor
-      || a.goalsOwn - b.goalsOwn);
+      || b.goalsOwn - a.goalsOwn);
 
     return sort;
   }
