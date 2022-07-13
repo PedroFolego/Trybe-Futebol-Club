@@ -11,10 +11,10 @@ export default class LeaderboardService implements ILeaderboardService {
   constructor(serviceMatche: IMatchesService, serviceTeam: ITeamsService) {
     this.#serviceMatche = serviceMatche;
     this.#serviceTeam = serviceTeam;
-    this.leaderboard = [];
   }
 
   private async getLeaderboard(type: 'home' | 'away', ClassLeaderboard: IConstructorLeaderboard) {
+    this.leaderboard = [];
     const teams = await this.#serviceTeam.getAll();
     const matches = await this.#serviceMatche.getInProgress(false);
 
