@@ -18,10 +18,8 @@ export interface IConstructorLeaderboard {
 }
 
 export interface ILeaderboardService {
-  // orderLeaderboard(
-  //   type: 'home' | 'away', ClassLeaderboard: IConstructorLeaderboard
-  // ): Promise<ILeaderboard[]>
+  getLeaderboardGeneral(): Promise<ILeaderboard[]>
   getLeaderboard(
-    ClassLeaderboard: IConstructorLeaderboard, type?: 'home' | 'away'
+    ClassLeaderboard: IConstructorLeaderboard, type: 'home' | 'away'
   ): Promise<ILeaderboard[]>
 }

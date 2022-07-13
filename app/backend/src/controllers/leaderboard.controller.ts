@@ -12,7 +12,7 @@ export default class LeaderboardController {
 
   getAll = async (_req: Request, res: Response, next: NextFunction) => {
     try {
-      const leaderboard = await this.#service.getLeaderboard(LeaderboardTeamHome);
+      const leaderboard = await this.#service.getLeaderboardGeneral();
       return res.status(StatusCodes.OK).json(leaderboard);
     } catch (error) {
       next(error);

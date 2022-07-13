@@ -20,8 +20,8 @@ const factory = () => {
   return controller;
 };
 
-// leaderboard.get('/', factory());
 leaderboard.get('/home', factory().getAllHome);
 leaderboard.get('/away', factory().getAllAway);
+leaderboard.get('/', factory().getAll);
 
 export default leaderboard;
