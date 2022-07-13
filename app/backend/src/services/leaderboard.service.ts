@@ -13,7 +13,40 @@ export default class LeaderboardService implements ILeaderboardService {
     this.#serviceTeam = serviceTeam;
   }
 
-  private async getLeaderboard(type: 'home' | 'away', ClassLeaderboard: IConstructorLeaderboard) {
+  async getLeaderboard(
+    ClassLeaderboard: IConstructorLeaderboard,
+    type?: 'home' | 'away',
+  ) {
+    this.leaderboard = [];
+    const teams = await this.#serviceTeam.getAll();
+    const matches = await this.#serviceMatche.getInProgress(false);
+
+    teams.forEach((team) => {
+      const matchesTeam = matches
+        .filter((match) => (type
+          ? (match[`${type}Team`]) === team.id
+          : match.awayTeam === team.id || match.homeTeam === team.id));
+
+      this.leaderboard.push(new ClassLeaderboard(matchesTeam));
+    });
+    return this.orderLeaderboard();
+  }
+
+  private async orderLeaderboard() {
+    const sort = this.leaderboard.sort((a, b) =>
+      b.totalPoints - a.totalPoints
+      || b.totalVictories - a.totalVictories
+      || b.goalsBalance - a.goalsBalance
+      || b.goalsFavor - a.goalsFavor
+      || b.goalsOwn - a.goalsOwn);
+
+    return sort;
+  }
+
+  async getLeadfffferboard(
+    type: 'home' | 'away',
+    ClassLeaderboard: IConstructorLeaderboard,
+  ) {
     this.leaderboard = [];
     const teams = await this.#serviceTeam.getAll();
     const matches = await this.#serviceMatche.getInProgress(false);
@@ -27,18 +60,6 @@ export default class LeaderboardService implements ILeaderboardService {
 
       this.leaderboard.push(new ClassLeaderboard(matchesTeam));
     });
-  }
-
-  async orderLeaderboard(type: 'home' | 'away', ClassLeaderboard: IConstructorLeaderboard) {
-    await this.getLeaderboard(type, ClassLeaderboard);
-
-    const sort = this.leaderboard.sort((a, b) =>
-      b.totalPoints - a.totalPoints
-      || b.totalVictories - a.totalVictories
-      || b.goalsBalance - a.goalsBalance
-      || b.goalsFavor - a.goalsFavor
-      || b.goalsOwn - a.goalsOwn);
-
-    return sort;
+    return this.orderLeaderboard();
   }
 }

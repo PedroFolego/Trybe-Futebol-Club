@@ -10,9 +10,18 @@ export default class LeaderboardController {
     this.#service = service;
   }
 
+  getAll = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const leaderboard = await this.#service.getLeaderboard(LeaderboardTeamHome);
+      return res.status(StatusCodes.OK).json(leaderboard);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   getAllHome = async (_req: Request, res: Response, next: NextFunction) => {
     try {
-      const leaderboard = await this.#service.orderLeaderboard('home', LeaderboardTeamHome);
+      const leaderboard = await this.#service.getLeaderboard(LeaderboardTeamHome, 'home');
       return res.status(StatusCodes.OK).json(leaderboard);
     } catch (error) {
       next(error);
@@ -21,7 +30,7 @@ export default class LeaderboardController {
 
   getAllAway = async (_req: Request, res: Response, next: NextFunction) => {
     try {
-      const leaderboard = await this.#service.orderLeaderboard('away', LeaderboardTeamAway);
+      const leaderboard = await this.#service.getLeaderboard(LeaderboardTeamAway, 'away');
       return res.status(StatusCodes.OK).json(leaderboard);
     } catch (error) {
       next(error);
