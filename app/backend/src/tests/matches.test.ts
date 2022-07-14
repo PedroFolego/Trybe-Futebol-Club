@@ -311,7 +311,7 @@ describe('Verifica a rota /matches/:id PATCH', () => {
     expect(chaiHttpResponse.body).to.be.eqls({ message: 'Missing body' })
   })
 })
-// describe('Verifica a rota /matches POST quando ', () => {
+// describe('Verifica a rota /matches POST', () => {
 //   const fakeResponse = [ 
 //     {
 //       id: 1,
@@ -377,5 +377,82 @@ describe('Verifica a rota /matches/:id PATCH', () => {
 //       awayTeamGoals: 0,
 //       inProgress: true,
 //     });
+//   });
+// });
+describe('Verifica a rota /matches POST quando envia autorizações inválidas', () => {
+  beforeEach(async () => {
+    sinon.stub(jwt, 'verify')
+      .resolves()
+  })
+  afterEach(async () => {
+    (jwt.verify as sinon.SinonStub).restore();
+  })
+  it('Um status 401 e um mensagem de token inválido quando enviado sem um token', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .post('/matches');
+
+    expect(chaiHttpResponse.status).to.be.equal(401);
+    expect(chaiHttpResponse.body).to.be.eqls({ message: 'Token must be a valid token'});
+  });
+  it('Um status 401 e um mensagem de token inválido quando enviado um token inválido', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .post('/matches')
+      .set('authorization', 'tokenInvalido');
+
+    expect(chaiHttpResponse.status).to.be.equal(401);
+    expect(chaiHttpResponse.body).to.be.eqls({ message: 'Token must be a valid token'});
+  });
+});
+describe('Verifica a rota /matches POST quando envia o usuário inválido', () => {
+  beforeEach(async () => {
+    sinon.stub(Users, 'findOne')
+      .resolves(null)
+    sinon.stub(jwt, 'verify')
+      .resolves({ data: { role: 'admin', email: 'emailNaoExiste' } })
+  })
+  afterEach(async () => {
+    (Users.findOne as sinon.SinonStub).restore();
+    (jwt.verify as sinon.SinonStub).restore();
+  })
+  it('Um status 401 e um mensagem de token inválido quando o usuário não existe', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .post('/matches')
+      .set('authorization', 'tokenValido');
+
+    expect(chaiHttpResponse.status).to.be.equal(401);
+    expect(chaiHttpResponse.body).to.be.eqls({ message: 'Token must be a valid token'});
+  });
+});
+// describe('Verifica a rota /matches POST quando a requisição é inválida', () => {
+//   beforeEach(async () => {
+//     // sinon.stub(Matches, 'findByPk')
+//     //   .resolves(null)
+//     sinon.stub(Users, 'findOne')
+//       .resolves({
+//         email: 'email@valido.com',
+//         password: 'password',
+//       } as Users);
+//     sinon.stub(jwt, 'verify')
+//       .resolves({ data: { role: 'admin', email: 'email@valido.com' } })
+//   })
+//   afterEach(async () => {
+//     (Users.findOne as sinon.SinonStub).restore();
+//     (jwt.verify as sinon.SinonStub).restore();
+//     // (Matches.findByPk as sinon.SinonStub).restore();
+//   })
+//   it('Um status 401 e um mensagem de times iguais', async () => {
+//     chaiHttpResponse = await chai
+//       .request(app)
+//       .post('/matches')
+//       .set('authorization', 'tokenValido')
+//       .send({ homeTeam: 3, awayTeam: 3 });
+//     // console.log(jwt.verify('dsdsd', ''));
+    
+
+//     expect(chaiHttpResponse.status).to.be.equal(401);
+//     expect(chaiHttpResponse.body).to.be.eqls({ message: 'It is not possible to create a match with two equal teams'});
 //   });
 // });
