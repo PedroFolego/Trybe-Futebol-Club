@@ -3,7 +3,7 @@
 
 # Contexto
 O TFC é um site informativo sobre partidas e classificações de futebol!
-Desenvolvimento de uma API (utilizando o método TDD) dockerizado utilizando modelagem de dados através do Sequelize. 
+Desenvolvimento de uma API (utilizando o método TDD) dockerizada utilizando modelagem de dados através do Sequelize. 
 Consumida por um front-end já provido pela escola da Trybe.
 
 Usando as camadas da aplicação (Models, Service e Controllers),
